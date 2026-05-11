@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator Pink Aesthetic</title>
+    <style>
+        /* CSS: Tema Pink & Glassmorphism */
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: #ffeaa7; /* Warna background kuning pastel */
+            background: linear-gradient(135deg, #fab1a0, #ff9ff3);
+        }
+
+        .calculator { 
+            width: 320px; 
+            background: #ffffff; 
+            padding: 25px; 
+            border-radius: 30px; /* Lebih bulat */
+            box-shadow: 0 20px 40px rgba(255, 121, 121, 0.3); 
+        }
+
+        #display { 
+            width: 100%; 
+            height: 80px; 
+            font-size: 2.2rem; 
+            text-align: right; 
+            margin-bottom: 20px; 
+            padding: 15px; 
+            box-sizing: border-box; 
+            border: 2px solid #ffdae9; 
+            border-radius: 20px;
+            background: #fff5f8; 
+            color: #ff6b81;
+            font-weight: bold;
+        }
+
+        .buttons { 
+            display: grid; 
+            grid-template-columns: repeat(4, 1fr); 
+            gap: 12px; 
+        }
+
+        .btn { 
+            padding: 18px; 
+            font-size: 1.1rem; 
+            font-weight: 600;
+            border: none; 
+            border-radius: 15px; 
+            cursor: pointer; 
+            background: #ffdae9; /* Pink Muda */
+            color: #ff6b81; 
+            transition: all 0.3s ease; 
+        }
+
+        .btn:hover { 
+            background: #ffb8d1; 
+            transform: scale(1.05); 
+        }
+
+        .btn:active { transform: scale(0.95); }
+
+        /* Tombol Operator */
+        .operator { 
+            background: #ff8fa3; 
+            color: white; 
+        }
+        .operator:hover { background: #ff758f; }
+
+        /* Tombol Sama Dengan */
+        .equal { 
+            background: #ff4d6d; 
+            color: white;
+            grid-row: span 2; 
+        }
+        .equal:hover { background: #c9184a; }
+
+        /* Tombol Clear */
+        .clear { 
+            background: #a29bfe; /* Ungu pastel agar kontras */
+            color: white;
+            grid-column: span 2; 
+        }
+        .clear:hover { background: #6c5ce7; }
+
+        .zero { grid-column: span 1; }
+    </style>
+</head>
+<body>
+
+    <div class="calculator">
+        <!-- Layar Display -->
+        <input type="text" id="display" readonly value="0">
+        
+        <div class="buttons">
+            <!-- Tombol Clear -->
+            <button class="btn clear" onclick="clearDisplay()">Clear</button>
+            <button class="btn operator" onclick="appendOperator('/')">÷</button>
+            <button class="btn operator" onclick="appendOperator('*')">×</button>
+            
+            <button class="btn" onclick="appendNumber('7')">7</button>
+            <button class="btn" onclick="appendNumber('8')">8</button>
+            <button class="btn" onclick="appendNumber('9')">9</button>
+            <button class="btn operator" onclick="appendOperator('-')">-</button>
+            
+            <button class="btn" onclick="appendNumber('4')">4</button>
+            <button class="btn" onclick="appendNumber('5')">5</button>
+            <button class="btn" onclick="appendNumber('6')">6</button>
+            <button class="btn operator" onclick="appendOperator('+')">+</button>
+            
+            <button class="btn" onclick="appendNumber('1')">1</button>
+            <button class="btn" onclick="appendNumber('2')">2</button>
+            <button class="btn" onclick="appendNumber('3')">3</button>
+            
+            <!-- Perhitungan -->
+            <button class="btn equal" onclick="calculate()">=</button>
+            
+            <button class="btn zero" onclick="appendNumber('0')">0</button>
+            <!-- Tombol Desimal -->
+            <button class="btn" onclick="appendNumber('.')">.</button>
+        </div>
+    </div>
+
+    <script>
+        /* Logika JavaScript (Sama dengan sebelumnya) */
+        let display = document.getElementById('display');
+        let currentInput = '0';
+
+        function updateDisplay() {
+            display.value = currentInput;
+        }
+
+        function appendNumber(num) {
+            // Validasi: Cegah double desimal
+            if (num === '.' && currentInput.includes('.')) return;
+            
+            if (currentInput === '0' && num !== '.') {
+                currentInput = num;
+            } else {
+                currentInput += num;
+            }
+            updateDisplay();
+        }
+
+        function appendOperator(op) {
+            // Validasi: Ganti operator jika ditekan berulang
+            const lastChar = currentInput.slice(-1);
+            if (['+', '-', '*', '/'].includes(lastChar)) {
+                currentInput = currentInput.slice(0, -1) + op;
+            } else {
+                currentInput += op;
+            }
+            updateDisplay();
+        }
+
+        function clearDisplay() {
+            currentInput = '0';
+            updateDisplay();
+        }
+
+        function calculate() {
+            try {
+                // Menghitung hasil
+                let result = eval(currentInput);
+                
+                // Pembulatan desimal agar tidak error floating point[cite: 1]
+                currentInput = Number(result.toFixed(10)).toString();
+                updateDisplay();
+            } catch (e) {
+                display.value = "Error";
+                currentInput = '0';
+            }
+        }
+    </script>
+</body>
+</html>
